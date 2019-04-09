@@ -1,0 +1,31 @@
+            String Id = txtbxID.Text;
+
+            String qryString = "Select * From Ejemplo Where Id = " + Id;
+
+            using (cnn) {
+                SqlCommand myCommand = new SqlCommand(qryString, cnn);
+                try
+                {
+                    SqlDataReader reader = myCommand.ExecuteReader(); // Error aqui con el '='
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            txtbxNombre.Text = reader["Nombre"].ToString();
+                            txtbxSueldo.Text = reader["Sueldo"].ToString();
+                            this.dtpFecha.Value = (DateTime)reader["Fecha"];
+                        }
+                    }
+                    else
+                    {
+                        txtbxNombre.Text = "";
+                        txtbxSueldo.Text = "";
+                        dtpFecha.Value = DateTime.Now;
+                        MessageBox.Show("No existe registro con el ID indicado");
+                    }
+                    reader.Close();
+                }
+                catch (SqlException){
+                    MessageBox.Show("No se pudo ejecutar");
+                }
+            }
